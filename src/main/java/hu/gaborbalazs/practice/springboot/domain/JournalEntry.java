@@ -8,15 +8,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import hu.gaborbalazs.practice.springboot.util.JsonDateSerializer;
+
 @Entity
-public class Journal {
+@Table(name = "entry")
+public class JournalEntry {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String title;
 	private String summary;
@@ -31,13 +38,13 @@ public class Journal {
 				.append("created", created).append("format", format).toString();
 	}
 
-	public Journal(String title, String summary, String date) throws ParseException {
+	public JournalEntry(String title, String summary, String date) throws ParseException {
 		this.title = title;
 		this.summary = summary;
 		this.created = format.parse(date);
 	}
 
-	public Journal() {
+	public JournalEntry() {
 	}
 
 	public Long getId() {
@@ -64,6 +71,7 @@ public class Journal {
 		this.summary = summary;
 	}
 
+	@JsonSerialize(using = JsonDateSerializer.class)
 	public Date getCreated() {
 		return created;
 	}
@@ -72,8 +80,9 @@ public class Journal {
 		this.created = created;
 	}
 
+	@JsonIgnore
 	public String getCreatedAsShort() {
 		return format.format(created);
 	}
-	
+
 }

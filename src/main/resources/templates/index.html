@@ -10,11 +10,9 @@
 	href="css/bootstrap-glyphicons.css"></link>
 <link rel="stylesheet" type="text/css" media="all" href="css/styles.css"></link>
 </head>
-
 <body>
 	<div class="container">
 		<h1>Spring Boot Journal</h1>
-
 		<ul class="timeline">
 			<div th:each="entry,status : ${journal}">
 				<li th:attr="class=${status.odd}?'timeline-inverted':''">
